@@ -1,0 +1,33 @@
+// Simple Pest Grammar for a Basic Programming Language
+
+// Whitespace handling
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+
+// Numbers
+integer = @{ ("+" | "-")? ~ ASCII_DIGIT+ }
+float = @{ ("+" | "-")? ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT* }
+number = { integer | float }
+
+// Strings
+single_quoted_string = @{ "'" ~ (!"\'" ~ ANY)* ~ "'" }
+double_quoted_string = @{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+string = { single_quoted_string | double_quoted_string }
+
+// Identifiers
+identifier = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC)* }
+
+// Math operations
+math_operator = { "+" | "-" }
+math_expression = { (number | string | identifier) ~ math_operator ~ (number | string | identifier) }
+
+// Function call syntax
+function_call = { identifier ~ "(" ~ argument_list? ~ ")" }
+argument_list = { (number | string | identifier | math_expression) ~ ("," ~ argument_list)? }
+
+// Basic program structure
+program = { SOI ~ statement* ~ EOI }
+statement = { (function_call | assignment | math_expression) ~ ";" }
+assignment = { identifier ~ "=" ~ (string | function_call | math_expression) }
+
+// Comments (optional)
+comment = _{ "//" ~ (!";" ~ ANY)* }
