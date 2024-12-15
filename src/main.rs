@@ -10,7 +10,7 @@ const BUILTIN: [&str;1] = ["print"];
 struct Lexer;
 
 fn main() {
-    let res = parsing("x=2+1;print(x);");
+    let res = parsing("x=4 * 2;print(x);");
     if res.is_err(){
         println!("Error: {}", res.unwrap_err());
     }
@@ -24,6 +24,8 @@ fn main() {
 enum Operation{
     Add,
     Subtract,
+    Multiply,
+    Divide,
 }
 
 impl Operation{
@@ -34,6 +36,12 @@ impl Operation{
             }
             "-" => {
                 return Some(Operation::Subtract);
+            }
+            "*" => {
+                return Some(Operation::Multiply);
+            }
+            "/" => {
+                return Some(Operation::Divide);
             }
             _ => {
                 return None;
@@ -85,6 +93,41 @@ impl Operation{
                     }
                 }
             }
+            Operation::Multiply => {
+                match **left{
+                    Data::Number(value1) => {
+                        match **right{
+                            Data::Number(value2) => {
+                                return Some((value1 * value2).to_string());
+                            }
+                            _ => {
+                                return None;
+                            }
+                        }
+                    }
+                    _ => {
+                        return None;
+                    }
+                }
+            }
+            Operation::Divide => {
+                match **left{
+                    Data::Number(value1) => {
+                        match **right{
+                            Data::Number(value2) => {
+                                return Some((value1 / value2).to_string());
+                            }
+                            _ => {
+                                return None;
+                            }
+                        }
+                    }
+                    _ => {
+                        return None;
+                    }
+                }
+            }
+            
         }
     }
 }

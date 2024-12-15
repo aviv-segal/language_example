@@ -4,8 +4,8 @@
 WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
 
 // Numbers
-integer = @{ ("+" | "-")? ~ ASCII_DIGIT+ }
-float = @{ ("+" | "-")? ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT* }
+integer = @{ ("+" | "-" | "*" | "/")? ~ ASCII_DIGIT+ }
+float = @{ ("+" | "-"| "*"| "/")? ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT* }
 number = { integer | float }
 
 // Strings
@@ -17,7 +17,7 @@ string = { single_quoted_string | double_quoted_string }
 identifier = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC)* }
 
 // Math operations
-math_operator = { "+" | "-" }
+math_operator = { "+" | "-" | "*" | "/"}
 math_expression = { (number | string | identifier) ~ math_operator ~ (number | string | identifier) }
 
 // Function call syntax
